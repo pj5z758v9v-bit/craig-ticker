@@ -1,0 +1,17 @@
+{
+ "name": "Craig Ticker",
+ "short_name": "Craig Ticker",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "any",
+ "background_color": "#1a110a",
+ "theme_color": "#1a110a",
+ "icons": [
+  {
+   "src": "apple-touch-icon.png",
+   "sizes": "180x180",
+   "type": "image/png"
+  }
+ ]
+}

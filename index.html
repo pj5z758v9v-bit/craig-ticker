@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Craig Ticker">
+<meta name="theme-color" content="#1a110a">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<title>Craig Ticker</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#1a110a;-webkit-text-size-adjust:100%}
+body{background:radial-gradient(ellipse at 40% 45%,#3b2a1a 0%,#24170d 55%,#120a05 100%)}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+#m{position:fixed;left:0;top:0;transform-origin:0 0;will-change:transform;pointer-events:none}
+#hud{position:fixed;right:0;bottom:0;text-align:right;flex-direction:column;gap:.5em;align-items:flex-end!important;padding:0 4vw calc(env(safe-area-inset-bottom) + 2.2vh);display:flex;justify-content:space-between;align-items:baseline;
+ font-family:"Courier New",Courier,"Liberation Mono","Nimbus Mono PS",monospace;color:#d8c28e;letter-spacing:.06em;pointer-events:none;text-shadow:0 1px 0 #000}
+#hud .t{font-size:clamp(17px,3.2vw,30px);font-weight:700;color:#f3dc9c}
+#hud .u{white-space:nowrap;font-size:clamp(11px,1.6vw,15px);opacity:.8}
+.up{color:#7fd08a}.dn{color:#ff8f7a}
+#wheel{transform-origin:0 0}
+</style></head><body>
+<canvas id="c"></canvas>
+<svg id="m" width="300" height="340" viewBox="0 0 300 340" aria-hidden="true">
+<defs>
+<linearGradient id="br" x1="0" x2="1"><stop offset="0" stop-color="#6b4a17"/><stop offset=".3" stop-color="#e9c46a"/><stop offset=".55" stop-color="#b8862d"/><stop offset=".8" stop-color="#f4d98a"/><stop offset="1" stop-color="#5c3d10"/></linearGradient>
+<linearGradient id="brv" y1="0" y2="1" x1="0" x2="0"><stop offset="0" stop-color="#f6dc8e"/><stop offset=".5" stop-color="#b0802a"/><stop offset="1" stop-color="#5a3b10"/></linearGradient>
+<radialGradient id="gl" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".5" stop-color="#cfe6ee" stop-opacity=".08"/><stop offset="1" stop-color="#9cc" stop-opacity=".22"/></radialGradient>
+<linearGradient id="wd" x1="0" x2="1"><stop offset="0" stop-color="#2a160a"/><stop offset=".5" stop-color="#5a3216"/><stop offset="1" stop-color="#2a160a"/></linearGradient>
+</defs>
+<!-- wooden plinth -->
+<rect x="18" y="292" width="264" height="34" rx="6" fill="url(#wd)"/>
+<rect x="10" y="318" width="280" height="14" rx="4" fill="#1e0f06"/>
+<!-- brass base ring -->
+<rect x="40" y="268" width="220" height="28" rx="6" fill="url(#br)"/>
+<rect x="40" y="268" width="220" height="5" fill="#fbe7a8" opacity=".5"/>
+<!-- inner mechanism -->
+<g>
+ <rect x="88" y="168" width="10" height="102" fill="url(#br)"/>
+ <rect x="202" y="168" width="10" height="102" fill="url(#br)"/>
+ <rect x="80" y="160" width="140" height="12" rx="3" fill="url(#brv)"/>
+ <!-- electromagnets -->
+ <rect x="104" y="196" width="22" height="58" rx="4" fill="#5b1e12"/><rect x="104" y="196" width="22" height="58" rx="4" fill="url(#gl)"/>
+ <path d="M104 204h22M104 212h22M104 220h22M104 228h22M104 236h22M104 244h22" stroke="#8a3a20" stroke-width="2"/>
+ <!-- type wheel -->
+ <g transform="translate(168 214)"><g id="wheel">
+  <circle r="34" fill="url(#brv)" stroke="#5a3b10" stroke-width="3"/>
+  <circle r="26" fill="none" stroke="#3a2608" stroke-width="2" stroke-dasharray="3 3.8"/>
+  <path d="M0-30V30M-30 0H30M-21-21L21 21M21-21L-21 21" stroke="#6b4a17" stroke-width="4"/>
+  <circle r="7" fill="#2c1c06"/><circle r="3" fill="#f4d98a"/>
+ </g></g>
+ <!-- striker arm -->
+ <g id="arm"><path d="M112 186 L170 170" stroke="#2c1c06" stroke-width="7" stroke-linecap="round"/><circle cx="112" cy="186" r="6" fill="url(#brv)"/><rect x="164" y="164" width="12" height="10" rx="2" fill="#2c1c06"/></g>
+ <!-- paper roll & guide -->
+ <circle cx="150" cy="128" r="22" fill="#e8dcbc"/><circle cx="150" cy="128" r="22" fill="none" stroke="#b9a77c" stroke-width="1.5" stroke-dasharray="1 4"/><circle cx="150" cy="128" r="6" fill="url(#brv)"/>
+ <rect x="230" y="240" width="58" height="14" rx="3" fill="url(#brv)"/>
+</g>
+<!-- glass dome -->
+<path d="M52 270 V120 A98 98 0 0 1 248 120 V270 Z" fill="url(#gl)" stroke="#e8f4f4" stroke-opacity=".35" stroke-width="2"/>
+<path d="M70 250 V124 A80 80 0 0 1 120 50" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="7" stroke-linecap="round"/>
+<path d="M232 200 V130" stroke="#fff" stroke-opacity=".15" stroke-width="4" stroke-linecap="round"/>
+<!-- finial -->
+<rect x="140" y="12" width="20" height="12" rx="3" fill="url(#br)"/><circle cx="150" cy="10" r="8" fill="url(#brv)"/>
+<!-- plaque -->
+<rect x="104" y="300" width="92" height="16" rx="2" fill="url(#br)"/>
+<text x="150" y="312" text-anchor="middle" font-family="Courier New,monospace" font-size="10" font-weight="700" fill="#3a2608" letter-spacing="1" transform="translate(300 0) scale(-1 1)">CRAIG &amp; CO.</text>
+</svg>
+<div id="hud"><span class="t" id="tot"></span><span class="u" id="upd"></span></div>
+<script>
+var DATA = {"updated":"2026-10-14T12:35:34.712934-04:00","market_open":true,"rows":[{"ticker":"MU","price":923.86,"pct":-3.08},{"ticker":"NVDA","price":221.68,"pct":-2.99},{"ticker":"GOOG","price":346.62,"pct":-0.83},{"ticker":"QQQ","price":730.45,"pct":-1.76},{"ticker":"CRWD","price":252.02,"pct":-3.52},{"ticker":"LLY","price":1213.42,"pct":4.02},{"ticker":"AMZN","price":254.32,"pct":-1.65},{"ticker":"SNDK","price":1415.92,"pct":-4.48},{"ticker":"AAPL","price":345.03,"pct":1.1},{"ticker":"TSLA","price":365.8,"pct":-2.51},{"ticker":"STX","price":724.52,"pct":-3.04},{"ticker":"AMD","price":570.22,"pct":-5.83},{"ticker":"SPY","price":769.61,"pct":-1.08},{"ticker":"WDC","price":368.05,"pct":-3.33},{"ticker":"META","price":737.29,"pct":-3.31},{"ticker":"CAT","price":747.58,"pct":-3.26},{"ticker":"AVGO","price":346.92,"pct":-2.91},{"ticker":"SPCX","price":153.28,"pct":-2.09},{"ticker":"GOOGL","price":350.89,"pct":-0.82},{"ticker":"MSFT","price":536.24,"pct":-1.33},{"ticker":"AEM","price":175.04,"pct":-5.69},{"ticker":"PLTR","price":203.61,"pct":-2.42}]};
+(function(){
+var cv=document.getElementById("c"),cx=cv.getContext("2d"),svg=document.getElementById("m"),
+ wheel=document.getElementById("wheel"),arm=document.getElementById("arm");
+var W,H,DPR,TH,FONT,CHW,SPEED,MX,MY,SC,FLAT,PORT;
+var MONO='"Courier New",Courier,"Liberation Mono","Nimbus Mono PS",monospace';
+var data=DATA,tiles=[],U=0,uEnd=0,queue=[],last=performance.now(),t0=last,lastChar=0,armT=0;
+var m=location.search.match(/[?&]t=([\d.]+)/), fakeT=m?+m[1]*1000:0, FREEZE=/[?&]freeze=1/.test(location.search);
+function layout(){
+ DPR=Math.min(window.devicePixelRatio||1,2);W=innerWidth;H=innerHeight;PORT=H>W;
+ cv.width=W*DPR;cv.height=H*DPR;
+ var mw=PORT?Math.min(W*0.42,170):Math.min(W*0.24,H*0.5,300);SC=mw/300;
+ TH=PORT?Math.max(50,Math.min(W*0.15,84)):Math.max(56,Math.min(H*0.17,W*0.1,130));
+ FONT=Math.round(TH*0.56);
+ cx.font="700 "+FONT+"px "+MONO;CHW=cx.measureText("M").width;
+ SPEED=CHW*(PORT?3.2:4.2);
+ var mx=PORT?W*0.02:W*0.025, my=PORT?H*0.30-247*SC:H*0.40-247*SC;
+ svg.style.transform="translate("+(W-mx)+"px,"+my+"px) scale("+(-SC)+","+SC+")"; // mirrored machine at right; all tape geometry below is in mirrored x (x'=W-x)
+ MX=mx+284*SC;MY=my+247*SC;
+ FLAT=(PORT?W*0.8:W*0.72)-MX;
+ // rebuild tiles at new size
+ var keepU=U;tiles=[];uEnd=keepU-(FLAT+60);if(uEnd<0)uEnd=0;U=keepU;queue=[];fill();
+}
+function money(v,d){return v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});}
+function items(){var d=data,out=[];if(!d||!d.rows||!d.rows.length)return [{s:"AWAITING WIRE ",c:0}];
+ d.rows.forEach(function(r){out.push({s:r.ticker+" "+money(r.price,2),p:r.pct});});return out;}
+var RS=1;function rand(){RS=(RS*1664525+1013904223)>>>0;return RS/4294967296;}
+function rnd(a){return (rand()*2-1)*a}
+function makeTile(it){
+ var arrow="",h0=7;for(var q=0;q<it.s.length;q++)h0=(h0*31+it.s.charCodeAt(q))>>>0;RS=h0;var ch="",col="#1d1610";
+ if(it.p!=null){var r=Math.round(it.p*10)/10;arrow=r>0?"\u25B2":r<0?"\u25BC":"=";ch=arrow+Math.abs(r).toFixed(1);col=r>0?"#1f6b2c":r<0?"#a3201a":"#555";}
+ var main=it.s+(ch?" ":""),sep="   \u00B7   ";
+ var fs=it.tot?Math.round(FONT*1.12):FONT, f="700 "+fs+"px "+MONO;
+ cx.font=f;var w=Math.ceil(cx.measureText(main+ch+sep).width)+4;
+ var c=document.createElement("canvas");c.width=Math.ceil(w*DPR);c.height=Math.ceil(TH*DPR);
+ var g=c.getContext("2d");g.scale(DPR,DPR);
+ // aged cream paper
+ g.fillStyle="#efe3c4";g.fillRect(0,0,w,TH);
+ var gr=g.createLinearGradient(0,0,0,TH);gr.addColorStop(0,"rgba(120,90,40,.22)");gr.addColorStop(.12,"rgba(0,0,0,0)");gr.addColorStop(.88,"rgba(0,0,0,0)");gr.addColorStop(1,"rgba(120,90,40,.28)");
+ g.fillStyle=gr;g.fillRect(0,0,w,TH);
+ for(var i=0;i<w*0.5;i++){g.fillStyle="rgba("+(110+rand()*60|0)+","+(80+rand()*40|0)+",40,"+(rand()*0.10)+")";
+  g.fillRect(rand()*w,rand()*TH,2+rand()*9,0.6+rand()*0.8);}
+ for(i=0;i<w*0.03;i++){g.fillStyle="rgba(140,100,50,.06)";g.beginPath();g.arc(rand()*w,rand()*TH,3+rand()*10,0,7);g.fill();}
+ if(it.tot){g.fillStyle="rgba(160,40,30,.85)";g.fillRect(0,TH*0.1,w-CHW*2,2);g.fillRect(0,TH*0.88,w-CHW*2,2);}
+ // ink, character by character, faintly uneven
+ g.font=f;g.textBaseline="middle";var x=2,base=TH*0.54,s=main+ch,cw=g.measureText("M").width,chars=[];
+ for(i=0;i<s.length;i++){var k=s[i],isCh=i>=main.length;
+  g.globalAlpha=0.78+rand()*0.22;g.fillStyle=isCh?col:(it.tot?"#2a1208":"#1d1610");
+  g.fillText(k,x+rnd(0.6),base+rnd(1.2));
+  if(rand()<0.5){g.globalAlpha=0.12;g.fillText(k,x+rnd(1.2),base+rnd(1.5));}
+  if(k!==" ")chars.push(x);x+=cw;}
+ g.globalAlpha=0.6;g.fillStyle="#6b5a40";g.fillText(sep,x,base);g.globalAlpha=1;
+ return {c:c,w:w,u:uEnd,chars:chars};
+}
+function fill(){while(uEnd<U+40){if(!queue.length)queue=items();var t=makeTile(queue.shift());t.u=uEnd;uEnd+=t.w;tiles.push(t);}
+ var minU=U-(FLAT+Math.max(W,H)*2.2);while(tiles.length&&tiles[0].u+tiles[0].w<minU)tiles.shift();}
+// draw strip [u0,u1) of tape coordinate into current transform at x=0..(u1-u0) (tape runs right-to-left in u)
+function strip(u0,u1,dx){for(var i=0;i<tiles.length;i++){var t=tiles[i];var a=Math.max(u0,t.u),b=Math.min(u1,t.u+t.w);if(b<=a)continue;
+  cx.save();cx.translate(dx+u1-a,0);cx.scale(-1,1);
+  cx.drawImage(t.c,(a-t.u)*DPR,0,(b-a)*DPR,t.c.height,0,-TH/2,(b-a),TH);cx.restore();}}
+function frame(now){
+ var ms=fakeT?fakeT+(FREEZE?0:now-t0):now; var dt=Math.max(0,Math.min(0.5,(now-last)/1000));last=now;
+ if(fakeT)U=SPEED*ms/1000;else U+=SPEED*dt;fill();var T=ms/1000;
+ cx.setTransform(DPR,0,0,DPR,0,0);cx.clearRect(0,0,W,H);cx.setTransform(-DPR,0,0,DPR,W*DPR,0);cx.imageSmoothingQuality="high";
+ // --- flat legible span: tape coordinate u at screen x = MX+d is U-d
+ cx.save();cx.translate(MX,MY);
+ cx.shadowColor="rgba(0,0,0,.55)";cx.shadowBlur=18;cx.shadowOffsetY=10;cx.fillStyle="#efe3c4";cx.fillRect(0,-TH/2,FLAT+1,TH);cx.shadowColor="transparent";
+ strip(U-FLAT-1,U,0);cx.restore();
+ // --- curl: integrate a bending, twisting ribbon in thin slices
+ var x=MX+FLAT,y=MY,th=0,step=PORT?2:2.5,s=0,maxS=Math.max(W,H)*2,R=PORT?W*0.22:H*0.42,RT=PORT?H*0.32:H*0.3;
+ var shade=[];
+ for(s=0;s<maxS;s+=step){
+  var u=U-FLAT-s; if(u<0)break;
+  var k=s/R; th=Math.min(PORT?1.5:1.45,1.6*k*k/(1+0.5*k*k)*(PORT?1.5:1.25)) + Math.sin(T*0.35+s*0.004)*0.12*Math.min(1,k*0.7);
+  var tw=Math.pow(Math.max(0,s-TH*0.6)/RT,1.35)*2.6 + Math.sin(T*0.4+s*0.006)*0.15*Math.min(1,k*1.5);
+  var cs=Math.cos(tw),sy=Math.abs(cs); if(sy<0.06)sy=0.06;
+  var fade=Math.max(0,1-Math.max(0,s-maxS*0.55)/(maxS*0.45));
+  if(x>W+TH*2||y>H+TH*2)break;
+  cx.setTransform(-DPR,0,0,DPR,W*DPR,0);cx.translate(x,y);cx.rotate(th);
+  cx.scale(1,sy);
+  cx.globalAlpha=fade;
+  if(cs>0){strip(u-step-1,u,0);}else{cx.fillStyle="#d9c9a2";cx.fillRect(0,-TH/2,step+1,TH);}
+  // shading: darker as it turns edge-on
+  var dk=(1-sy)*0.55+(cs<0?0.15:0);if(dk>0.02){cx.fillStyle="rgba(40,25,10,"+dk+")";cx.fillRect(0,-TH/2,step+1,TH);}
+  cx.globalAlpha=1;
+  x+=Math.cos(th)*step;y+=Math.sin(th)*step+ (PORT?0:0);
+ }
+ cx.setTransform(DPR,0,0,DPR,0,0);
+ // mechanism motion: wheel spins with feed; arm strikes as each char passes mouth
+ wheel.setAttribute("transform","rotate("+((U/CHW)*36%360).toFixed(1)+")");
+ var cn=Math.floor(U/CHW); if(cn!==lastChar){lastChar=cn;armT=1;}
+ armT=Math.max(0,armT-dt*9);if(fakeT)armT=0;
+ arm.setAttribute("transform","rotate("+(armT*6).toFixed(2)+" 112 186)");
+ requestAnimationFrame(frame);
+}
+function fmtTime(s){var d=new Date(s);if(isNaN(d))return s;return d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/New_York"})+" ET";}
+function hud(){if(!data)return;document.getElementById("tot").textContent="";
+ document.getElementById("upd").textContent=fmtTime(data.updated)+" \u00b7 "+(data.market_open?"market open":"closed");}
+function refresh(){fetch("public.json?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}).then(function(d){if(d&&d.rows){data=d;hud();}}).catch(function(){});}
+var rt;addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(layout,120);});
+layout();hud();
+if(fakeT){U=SPEED*fakeT/1000;uEnd=0;tiles=[];queue=[];fill();}
+if(location.protocol!=="file:")refresh();setInterval(refresh,60000);
+requestAnimationFrame(frame);
+})();
+</script></body></html>
