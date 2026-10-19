@@ -69,7 +69,7 @@ body{background:radial-gradient(ellipse at 40% 45%,#3b2a1a 0%,#24170d 55%,#120a0
 </svg>
 <div id="hud"><span class="t" id="tot"></span><span class="u" id="upd"></span></div>
 <script>
-var DATA = {"updated":"2026-10-14T12:35:34.712934-04:00","market_open":true,"rows":[{"ticker":"MU","price":923.86,"pct":-3.08},{"ticker":"NVDA","price":221.68,"pct":-2.99},{"ticker":"GOOG","price":346.62,"pct":-0.83},{"ticker":"QQQ","price":730.45,"pct":-1.76},{"ticker":"CRWD","price":252.02,"pct":-3.52},{"ticker":"LLY","price":1213.42,"pct":4.02},{"ticker":"AMZN","price":254.32,"pct":-1.65},{"ticker":"SNDK","price":1415.92,"pct":-4.48},{"ticker":"AAPL","price":345.03,"pct":1.1},{"ticker":"TSLA","price":365.8,"pct":-2.51},{"ticker":"STX","price":724.52,"pct":-3.04},{"ticker":"AMD","price":570.22,"pct":-5.83},{"ticker":"SPY","price":769.61,"pct":-1.08},{"ticker":"WDC","price":368.05,"pct":-3.33},{"ticker":"META","price":737.29,"pct":-3.31},{"ticker":"CAT","price":747.58,"pct":-3.26},{"ticker":"AVGO","price":346.92,"pct":-2.91},{"ticker":"SPCX","price":153.28,"pct":-2.09},{"ticker":"GOOGL","price":350.89,"pct":-0.82},{"ticker":"MSFT","price":536.24,"pct":-1.33},{"ticker":"AEM","price":175.04,"pct":-5.69},{"ticker":"PLTR","price":203.61,"pct":-2.42}]};
+var DATA = {"updated":"2026-10-16T16:54:22.950480-04:00","market_open":false,"rows":[{"ticker":"MU","price":878.9,"pct":-5.62,"chg":-52.34},{"ticker":"NVDA","price":214.51,"pct":-1.25,"chg":-2.72},{"ticker":"GOOG","price":337.5,"pct":-2.15,"chg":-7.41},{"ticker":"QQQ","price":710.09,"pct":-2.46,"chg":-17.91},{"ticker":"LLY","price":1256.0,"pct":0.35,"chg":4.39},{"ticker":"AMZN","price":250.05,"pct":-1.85,"chg":-4.71},{"ticker":"CRWD","price":227.44,"pct":-7.0,"chg":-17.13},{"ticker":"AMD","price":530.12,"pct":-5.71,"chg":-32.11},{"ticker":"SNDK","price":1297.72,"pct":-6.96,"chg":-97.11},{"ticker":"TSLA","price":338.7,"pct":-6.55,"chg":-23.74},{"ticker":"AAPL","price":343.32,"pct":0.39,"chg":1.32},{"ticker":"META","price":710.05,"pct":-3.62,"chg":-26.67},{"ticker":"STX","price":639.0,"pct":-7.5,"chg":-51.81},{"ticker":"SPY","price":763.34,"pct":-1.09,"chg":-8.45},{"ticker":"WDC","price":330.74,"pct":-7.21,"chg":-25.71},{"ticker":"CAT","price":731.95,"pct":-0.5,"chg":-3.69},{"ticker":"AVGO","price":330.11,"pct":-4.13,"chg":-14.22},{"ticker":"SPCX","price":146.35,"pct":-1.53,"chg":-2.27},{"ticker":"GOOGL","price":341.0,"pct":-2.35,"chg":-8.22},{"ticker":"MSFT","price":528.49,"pct":-2.03,"chg":-10.95},{"ticker":"AEM","price":188.56,"pct":0.53,"chg":1.0},{"ticker":"PLTR","price":185.8,"pct":-7.33,"chg":-14.7}]};
 (function(){
 var cv=document.getElementById("c"),cx=cv.getContext("2d"),svg=document.getElementById("m"),
  wheel=document.getElementById("wheel"),arm=document.getElementById("arm");
@@ -94,12 +94,12 @@ function layout(){
 }
 function money(v,d){return v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});}
 function items(){var d=data,out=[];if(!d||!d.rows||!d.rows.length)return [{s:"AWAITING WIRE ",c:0}];
- d.rows.forEach(function(r){out.push({s:r.ticker+" "+money(r.price,2),p:r.pct});});return out;}
+ d.rows.forEach(function(r){out.push({s:r.ticker+" $"+money(r.price,2),p:r.pct,d:r.chg});});return out;}
 var RS=1;function rand(){RS=(RS*1664525+1013904223)>>>0;return RS/4294967296;}
 function rnd(a){return (rand()*2-1)*a}
 function makeTile(it){
  var arrow="",h0=7;for(var q=0;q<it.s.length;q++)h0=(h0*31+it.s.charCodeAt(q))>>>0;RS=h0;var ch="",col="#1d1610";
- if(it.p!=null){var r=Math.round(it.p*10)/10;arrow=r>0?"\u25B2":r<0?"\u25BC":"=";ch=arrow+Math.abs(r).toFixed(1);col=r>0?"#1f6b2c":r<0?"#a3201a":"#555";}
+ if(it.d!=null){var r=Math.round(it.d*100)/100;arrow=r>0?"\u25B2":r<0?"\u25BC":"=";ch=arrow+" $"+money(Math.abs(r),2);col=r>0?"#1f6b2c":r<0?"#a3201a":"#555";}
  var main=it.s+(ch?" ":""),sep="   \u00B7   ";
  var fs=it.tot?Math.round(FONT*1.12):FONT, f="700 "+fs+"px "+MONO;
  cx.font=f;var w=Math.ceil(cx.measureText(main+ch+sep).width)+4;
